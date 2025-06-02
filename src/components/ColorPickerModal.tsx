@@ -35,18 +35,6 @@ export const ColorPickerModal: React.FC<ColorPickerModalProps> = ({ onClose }) =
     setHex(color);
   }, [setHex]);
 
-  const handleHexChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setHex(value);
-  }, [setHex]);
-
-  const handleOpacityInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value);
-    if (!isNaN(value) && value >= 0 && value <= 100) {
-      setOpacity(value);
-    }
-  }, [setOpacity]);
-
   const handleEyedropper = useCallback(() => {
     if ('EyeDropper' in window) {
       // @ts-ignore - EyeDropper API is not yet in TypeScript types
@@ -80,7 +68,7 @@ export const ColorPickerModal: React.FC<ColorPickerModalProps> = ({ onClose }) =
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm">
+      <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm font-roboto">
         {/* Gradient Canvas */}
         <div className="mb-6">
           <GradientCanvas
@@ -106,10 +94,9 @@ export const ColorPickerModal: React.FC<ColorPickerModalProps> = ({ onClose }) =
         <ColorDisplay
           colorWithOpacity={colorWithOpacity}
           hex={hex}
-          hsb={hsb}
           opacity={opacity}
-          onHexChange={handleHexChange}
-          onOpacityInputChange={handleOpacityInputChange}
+          onHexChange={setHex}
+          onOpacityChange={setOpacity}
         />
 
         {/* Theme Colors */}

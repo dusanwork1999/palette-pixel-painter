@@ -57,9 +57,10 @@ export const OpacitySlider: React.FC<OpacitySliderProps> = ({ opacity, color, on
       <div
         ref={sliderRef}
         onMouseDown={handleMouseDown}
-        className="w-full h-4 rounded-full cursor-pointer border border-[#EEEEEE]"
+        className="w-full h-6 rounded-full cursor-pointer border border-[#EEEEEE]"
         style={{
-          background: `linear-gradient(to right, transparent 0%, ${color} 100%)`
+          background: `linear-gradient(to right, transparent 0%, ${color} 100%), 
+                      url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3cdefs%3e%3cpattern id='checkerboard' patternUnits='userSpaceOnUse' width='8' height='8'%3e%3crect width='4' height='4' fill='%23ffffff'/%3e%3crect x='4' y='4' width='4' height='4' fill='%23ffffff'/%3e%3crect x='4' y='0' width='4' height='4' fill='%23e5e5e5'/%3e%3crect x='0' y='4' width='4' height='4' fill='%23e5e5e5'/%3e%3c/pattern%3e%3c/defs%3e%3crect width='100%25' height='100%25' fill='url(%23checkerboard)'/%3e%3c/svg%3e")`
         }}
       />
       {/* Slider Handle with white color only */}
