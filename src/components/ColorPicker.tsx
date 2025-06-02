@@ -141,13 +141,13 @@ export const ColorPicker = () => {
             variant="ghost"
             size="sm"
             onClick={handleEyedropper}
-            className="p-2 hover:bg-gray-100 flex-shrink-0 border-2 border-gray-300 w-10"
-            style={{ height: '20px' }}
+            className="p-2 hover:bg-gray-100 flex-shrink-0 border-2 border-gray-300"
+            style={{ width: '40px', height: '32px' }}
           >
             <Pipette className="w-4 h-4" />
           </Button>
           
-          <div className="flex-1 space-y-2">
+          <div className="flex-1 space-y-3">
             {/* Hue Slider */}
             <div>
               <ColorSlider
@@ -172,7 +172,7 @@ export const ColorPicker = () => {
           <h3 className="text-sm font-medium text-gray-500 mb-3">Custom Color</h3>
           <div className="flex items-center gap-3">
             <div 
-              className="w-8 h-8 rounded-full border border-gray-200 flex-shrink-0"
+              className="w-8 h-8 rounded-full border border-[#EEEEEE] flex-shrink-0"
               style={{ backgroundColor: colorWithOpacity }}
             />
             <Input
@@ -182,32 +182,23 @@ export const ColorPicker = () => {
               placeholder="#F04343"
             />
             
-            {/* Inner Opacity Spinner */}
-            <div className="relative">
-              <Input
-                value={Math.round(opacity)}
-                onChange={handleOpacityInputChange}
-                className="w-16 text-sm text-center pr-6"
-                placeholder="100"
-                type="number"
-                min="0"
-                max="100"
-              />
-              <div className="absolute right-1 top-1/2 transform -translate-y-1/2 flex flex-col gap-0.5">
-                <button
-                  onMouseDown={(e) => handleOpacitySpinnerMouseDown(true, e)}
-                  className="w-3 h-2 text-xs text-gray-500 hover:text-gray-700 flex items-center justify-center leading-none"
-                >
-                  ▲
-                </button>
-                <button
-                  onMouseDown={(e) => handleOpacitySpinnerMouseDown(false, e)}
-                  className="w-3 h-2 text-xs text-gray-500 hover:text-gray-700 flex items-center justify-center leading-none"
-                >
-                  ▼
-                </button>
-              </div>
-            </div>
+            {/* Hue Display */}
+            <Input
+              value={Math.round(hsb.h)}
+              readOnly
+              className="w-16 text-sm text-center bg-gray-100 cursor-not-allowed"
+            />
+            
+            {/* Opacity Input */}
+            <Input
+              value={Math.round(opacity)}
+              onChange={handleOpacityInputChange}
+              className="w-16 text-sm text-center"
+              placeholder="100"
+              type="number"
+              min="0"
+              max="100"
+            />
             <span className="text-sm font-medium text-gray-600">%</span>
           </div>
         </div>

@@ -17,6 +17,7 @@ export const GradientCanvas: React.FC<GradientCanvasProps> = ({
   onChange
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
 
   const drawCanvas = useCallback(() => {
@@ -95,18 +96,21 @@ export const GradientCanvas: React.FC<GradientCanvasProps> = ({
   }, [handleMouseMove, handleMouseUp]);
 
   return (
-    <div className="relative">
+    <div 
+      ref={containerRef}
+      className="relative"
+      onMouseDown={handleMouseDown}
+    >
       <canvas
         ref={canvasRef}
         width={280}
         height={200}
-        onMouseDown={handleMouseDown}
-        className="w-full h-48 rounded-lg cursor-crosshair border border-gray-200"
+        className="w-full h-48 rounded-lg cursor-crosshair border border-[#EEEEEE]"
         style={{ maxWidth: '100%', height: '192px' }}
       />
       {/* Color Selector Circle with preview color */}
       <div
-        className="absolute w-5 h-5 border-2 border-gray-400 rounded-full shadow-lg pointer-events-none transform -translate-x-2.5 -translate-y-2.5 z-30"
+        className="absolute w-6 h-6 border-2 border-[#EEEEEE] rounded-full shadow-lg pointer-events-none transform -translate-x-3 -translate-y-3 z-30"
         style={{
           left: `${saturation}%`,
           top: `${100 - brightness}%`,

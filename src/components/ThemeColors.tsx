@@ -22,7 +22,7 @@ export const ThemeColors: React.FC<ThemeColorsProps> = ({ onColorSelect }) => {
         <button
           key={index}
           onClick={() => onColorSelect(color)}
-          className="w-8 h-8 rounded-full border border-gray-200 hover:scale-110 transition-transform duration-150 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+          className="w-8 h-8 rounded-full border border-[#EEEEEE] hover:scale-110 transition-transform duration-150 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
           style={{ backgroundColor: color }}
           aria-label={`Select ${color} color`}
         />
