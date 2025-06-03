@@ -1,29 +1,108 @@
 
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>palette-pixel-painter</title>
-    <meta name="description" content="Lovable Generated Project" />
-    <meta name="author" content="Lovable" />
-
-    <meta property="og:title" content="palette-pixel-painter" />
-    <meta property="og:description" content="Lovable Generated Project" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lovable_dev" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Picker</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
-  </head>
-
-  <body>
-    <div id="root"></div>
-    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+</head>
+<body>
+    <div class="app">
+        <div class="main-container">
+            <div class="control-panel">
+                <div class="button-group">
+                    <button id="openColorPicker" class="open-btn">
+                        Open Color Picker
+                    </button>
+                    <div id="colorPreview" class="color-preview"></div>
+                </div>
+                
+                <div class="position-controls">
+                    <div class="position-group">
+                        <label class="position-label">X:</label>
+                        <input type="number" id="positionX" class="position-input" value="100" min="0">
+                        <label class="position-label">Y:</label>
+                        <input type="number" id="positionY" class="position-input" value="100" min="0">
+                    </div>
+                </div>
+                
+                <div class="color-info">
+                    <h3 class="info-title">Selected Color Info</h3>
+                    <div class="info-row">
+                        <label class="info-label">Hex:</label>
+                        <input type="text" id="selectedHex" class="info-input" readonly>
+                    </div>
+                    <div class="info-row">
+                        <label class="info-label">Opacity:</label>
+                        <input type="number" id="selectedOpacity" class="opacity-input" readonly>
+                        <span class="percent-label">%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Color Picker Modal -->
+        <div id="colorPickerModal" class="modal hidden">
+            <div id="colorPickerContent" class="modal-content">
+                <!-- Gradient Canvas -->
+                <div class="gradient-container">
+                    <canvas id="gradientCanvas" width="280" height="200" class="gradient-canvas"></canvas>
+                    <div id="colorSelector" class="color-selector"></div>
+                </div>
+                
+                <!-- Color Controls -->
+                <div class="color-controls">
+                    <button id="eyedropperBtn" class="eyedropper-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="m2 22 1-1h3l9-9"/>
+                            <path d="M3 21v-3l9-9"/>
+                            <path d="m15 6 3.5-3.5a2.12 2.12 0 0 1 3 3L18 9l.5.5-3.5 3.5"/>
+                            <path d="m9 12 3.5 3.5-3.5 3.5a2.12 2.12 0 0 1-3-3l3.5-3.5Z"/>
+                        </svg>
+                    </button>
+                    
+                    <div class="sliders-container">
+                        <div class="hue-slider-container">
+                            <div id="hueSlider" class="hue-slider"></div>
+                            <div id="hueHandle" class="slider-handle"></div>
+                        </div>
+                        
+                        <div class="opacity-slider-container">
+                            <div id="opacitySlider" class="opacity-slider"></div>
+                            <div id="opacityHandle" class="slider-handle"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Custom Color Display -->
+                <div class="custom-color">
+                    <h3 class="section-title">Custom Color</h3>
+                    <div class="custom-color-row">
+                        <div id="customColorPreview" class="custom-color-preview"></div>
+                        <input type="text" id="hexInput" class="hex-input" placeholder="#F04343">
+                        <input type="number" id="opacitySpinner" class="opacity-spinner" value="100" min="0" max="100">
+                        <span class="percent-label">%</span>
+                    </div>
+                </div>
+                
+                <!-- Theme Colors -->
+                <div class="theme-colors">
+                    <h3 class="section-title">Theme Colors</h3>
+                    <div class="theme-colors-grid" id="themeColorsGrid"></div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button id="cancelBtn" class="cancel-btn">Cancel</button>
+                    <button id="selectBtn" class="select-btn">Select</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="utils.js"></script>
+    <script src="script.js"></script>
+</body>
 </html>
