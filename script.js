@@ -7,6 +7,10 @@ class ColorPicker {
         this.dragType = null;
         this.isModalOpen = false;
         
+        // 선택된 색상을 저장하는 변수들 (메인 화면에 표시되는 값들)
+        this.selectedHsb = { h: 0, s: 79, b: 94 };
+        this.selectedOpacity = 100;
+        
         this.themeColors = [
             '#3B82F6', '#8B5CF6', '#EC4899', '#F43F5E', 
             '#F97316', '#84CC16', '#EF4444'
@@ -14,7 +18,7 @@ class ColorPicker {
         
         this.initializeElements();
         this.bindEvents();
-        this.updateDisplay();
+        this.updateMainDisplay();
         this.initializeThemeColors();
     }
     
@@ -25,7 +29,7 @@ class ColorPicker {
         this.positionX = document.getElementById('positionX');
         this.positionY = document.getElementById('positionY');
         this.selectedHex = document.getElementById('selectedHex');
-        this.selectedOpacity = document.getElementById('selectedOpacity');
+        this.selectedOpacityInput = document.getElementById('selectedOpacity');
         
         // Modal elements
         this.modal = document.getElementById('colorPickerModal');
@@ -51,10 +55,7 @@ class ColorPicker {
         this.positionX.addEventListener('change', () => this.updateModalPosition());
         this.positionY.addEventListener('change', () => this.updateModalPosition());
         
-        // Modal events
-        this.modal.addEventListener('click', (e) => {
-            if (e.target === this.modal) this.closeModal();
-        });
+        // Modal events - 바깥 클릭으로 닫히는 기능 제거
         this.cancelBtn.addEventListener('click', () => this.closeModal());
         this.selectBtn.addEventListener('click', () => this.selectColor());
         
@@ -86,6 +87,9 @@ class ColorPicker {
     openModal() {
         this.isModalOpen = true;
         this.modal.classList.remove('hidden');
+        // 현재 선택된 값을 모달의 작업 값으로 설정
+        this.hsb = { ...this.selectedHsb };
+        this.opacity = this.selectedOpacity;
         this.updateModalPosition();
         this.updateCanvas();
         this.updateModalDisplay();
@@ -141,7 +145,7 @@ class ColorPicker {
         this.hsb.s = (x / rect.width) * 100;
         this.hsb.b = 100 - (y / rect.height) * 100;
         
-        this.updateDisplay();
+        this.updateModalDisplay();
     }
     
     handleSliderMove(e, type) {
@@ -157,7 +161,7 @@ class ColorPicker {
             this.opacity = percentage * 100;
         }
         
-        this.updateDisplay();
+        this.updateModalDisplay();
     }
     
     stopDrag() {
@@ -169,20 +173,18 @@ class ColorPicker {
         CanvasUtils.drawGradient(this.gradientCanvas, this.hsb.h);
     }
     
-    updateDisplay() {
-        const hex = ColorUtils.hsbToHex(this.hsb.h, this.hsb.s, this.hsb.b);
-        const colorWithOpacity = ColorUtils.hexToRgba(hex, this.opacity);
+    // 메인 화면의 값들을 업데이트 (Select 버튼을 눌렀을 때만 호출됨)
+    updateMainDisplay() {
+        const hex = ColorUtils.hsbToHex(this.selectedHsb.h, this.selectedHsb.s, this.selectedHsb.b);
+        const colorWithOpacity = ColorUtils.hexToRgba(hex, this.selectedOpacity);
         
         // Update main preview
         this.colorPreview.style.backgroundColor = colorWithOpacity;
         this.selectedHex.value = hex;
-        this.selectedOpacity.value = Math.round(this.opacity);
-        
-        if (this.isModalOpen) {
-            this.updateModalDisplay();
-        }
+        this.selectedOpacityInput.value = Math.round(this.selectedOpacity);
     }
     
+    // 모달 내부의 값들을 업데이트 (실시간으로 호출됨)
     updateModalDisplay() {
         const hex = ColorUtils.hsbToHex(this.hsb.h, this.hsb.s, this.hsb.b);
         const colorWithOpacity = ColorUtils.hexToRgba(hex, this.opacity);
@@ -216,7 +218,7 @@ class ColorPicker {
             const hsb = ColorUtils.hexToHsb(value);
             this.hsb = hsb;
             this.updateCanvas();
-            this.updateDisplay();
+            this.updateModalDisplay();
         } else {
             // Revert to current value
             this.hexInput.value = ColorUtils.hsbToHex(this.hsb.h, this.hsb.s, this.hsb.b);
@@ -227,7 +229,7 @@ class ColorPicker {
         const value = parseInt(this.opacitySpinner.value);
         if (!isNaN(value) && value >= 0 && value <= 100) {
             this.opacity = value;
-            this.updateDisplay();
+            this.updateModalDisplay();
         } else {
             // Revert to current value if invalid
             this.opacitySpinner.value = Math.round(this.opacity);
@@ -241,7 +243,7 @@ class ColorPicker {
                 const hsb = ColorUtils.hexToHsb(result.sRGBHex);
                 this.hsb = hsb;
                 this.updateCanvas();
-                this.updateDisplay();
+                this.updateModalDisplay();
             }).catch((error) => {
                 console.log('User cancelled the eyedropper');
             });
@@ -259,20 +261,27 @@ class ColorPicker {
                 const hsb = ColorUtils.hexToHsb(color);
                 this.hsb = hsb;
                 this.updateCanvas();
-                this.updateDisplay();
+                this.updateModalDisplay();
             });
             this.themeColorsGrid.appendChild(colorDiv);
         });
     }
     
     selectColor() {
-        const hex = ColorUtils.hsbToHex(this.hsb.h, this.hsb.s, this.hsb.b);
+        // Select 버튼을 눌렀을 때만 선택된 값들을 업데이트
+        this.selectedHsb = { ...this.hsb };
+        this.selectedOpacity = this.opacity;
+        
+        const hex = ColorUtils.hsbToHex(this.selectedHsb.h, this.selectedHsb.s, this.selectedHsb.b);
         const colorResult = {
             hex: hex,
-            opacity: Math.round(this.opacity)
+            opacity: Math.round(this.selectedOpacity)
         };
         
         console.log('Selected color:', colorResult);
+        
+        // 메인 화면 업데이트
+        this.updateMainDisplay();
         this.closeModal();
     }
 }
