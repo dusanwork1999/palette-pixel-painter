@@ -72,6 +72,29 @@ export const ColorPicker = () => {
                 min="0"
               />
             </div>
+            
+            <div className="space-y-3">
+              <h3 className="text-sm font-medium text-gray-700">Selected Color Info</h3>
+              <div className="flex items-center gap-4">
+                <label className="w-16 text-sm font-medium">Hex:</label>
+                <Input
+                  type="text"
+                  value={selectedColor.hex}
+                  readOnly
+                  className="flex-1 bg-gray-100 font-mono text-sm"
+                />
+              </div>
+              <div className="flex items-center gap-4">
+                <label className="w-16 text-sm font-medium">Opacity:</label>
+                <Input
+                  type="number"
+                  value={selectedColor.opacity}
+                  readOnly
+                  className="w-24 bg-gray-100 text-center"
+                />
+                <span className="text-sm font-medium text-gray-600">%</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -28,8 +28,6 @@ export const ColorPickerModal: React.FC<ColorPickerModalProps> = ({ onClose, onS
     setOpacity
   } = useColorState();
 
-  const opacityIntervalRef = useRef<NodeJS.Timeout | null>(null);
-
   const handleSaturationBrightnessChange = useCallback((saturation: number, brightness: number) => {
     setHsb(prev => ({ ...prev, s: saturation, b: brightness }));
   }, [setHsb]);
@@ -64,7 +62,6 @@ export const ColorPickerModal: React.FC<ColorPickerModalProps> = ({ onClose, onS
 
   // Calculate color with opacity for preview
   const colorWithOpacity = useMemo(() => {
-    // Convert hex to rgba with opacity
     if (hex.startsWith('#') && hex.length === 7) {
       const r = parseInt(hex.slice(1, 3), 16);
       const g = parseInt(hex.slice(3, 5), 16);
@@ -77,7 +74,7 @@ export const ColorPickerModal: React.FC<ColorPickerModalProps> = ({ onClose, onS
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-start justify-start p-4 z-50">
       <div 
-        className="bg-white rounded-2xl shadow-2xl p-6 w-[230px] h-[400px] font-roboto overflow-auto"
+        className="bg-white rounded-2xl shadow-2xl p-6 w-80 font-roboto overflow-auto"
         style={{
           marginLeft: `${position.x}px`,
           marginTop: `${position.y}px`,
