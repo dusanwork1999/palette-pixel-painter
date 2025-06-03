@@ -165,7 +165,6 @@ body {
     padding: 1.5rem;
     width: 20rem;
     font-family: 'Roboto', sans-serif;
-    overflow: auto;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -291,7 +290,7 @@ body {
 }
 
 .hex-input {
-    flex: 1;
+    width: 5rem;
     padding: 0.5rem;
     border: 1px solid #d1d5db;
     border-radius: 0.375rem;
@@ -300,7 +299,7 @@ body {
 }
 
 .opacity-spinner {
-    width: 4rem;
+    width: 3.5rem;
     padding: 0.5rem;
     border: 1px solid #d1d5db;
     border-radius: 0.375rem;

@@ -55,7 +55,6 @@ class ColorPicker {
         this.modal.addEventListener('click', (e) => {
             if (e.target === this.modal) this.closeModal();
         });
-        
         this.cancelBtn.addEventListener('click', () => this.closeModal());
         this.selectBtn.addEventListener('click', () => this.selectColor());
         
@@ -75,6 +74,9 @@ class ColorPicker {
             if (e.key === 'Enter') this.handleHexInput();
         });
         this.hexInput.addEventListener('blur', () => this.handleHexInput());
+        
+        // Opacity spinner events - 실시간 동기화를 위해 input 이벤트 추가
+        this.opacitySpinner.addEventListener('input', () => this.handleOpacitySpinner());
         this.opacitySpinner.addEventListener('change', () => this.handleOpacitySpinner());
         
         // Eyedropper
@@ -136,14 +138,10 @@ class ColorPicker {
         const x = Math.max(0, Math.min(rect.width, e.clientX - rect.left));
         const y = Math.max(0, Math.min(rect.height, e.clientY - rect.top));
         
-        const saturation = (x / rect.width) * 100;
-        const brightness = 100 - (y / rect.height) * 100;
-        
-        this.hsb.s = saturation;
-        this.hsb.b = brightness;
+        this.hsb.s = (x / rect.width) * 100;
+        this.hsb.b = 100 - (y / rect.height) * 100;
         
         this.updateDisplay();
-        this.updateModalDisplay();
     }
     
     handleSliderMove(e, type) {
@@ -160,7 +158,6 @@ class ColorPicker {
         }
         
         this.updateDisplay();
-        this.updateModalDisplay();
     }
     
     stopDrag() {
@@ -220,7 +217,6 @@ class ColorPicker {
             this.hsb = hsb;
             this.updateCanvas();
             this.updateDisplay();
-            this.updateModalDisplay();
         } else {
             // Revert to current value
             this.hexInput.value = ColorUtils.hsbToHex(this.hsb.h, this.hsb.s, this.hsb.b);
@@ -232,7 +228,9 @@ class ColorPicker {
         if (!isNaN(value) && value >= 0 && value <= 100) {
             this.opacity = value;
             this.updateDisplay();
-            this.updateModalDisplay();
+        } else {
+            // Revert to current value if invalid
+            this.opacitySpinner.value = Math.round(this.opacity);
         }
     }
     
@@ -244,7 +242,6 @@ class ColorPicker {
                 this.hsb = hsb;
                 this.updateCanvas();
                 this.updateDisplay();
-                this.updateModalDisplay();
             }).catch((error) => {
                 console.log('User cancelled the eyedropper');
             });
@@ -263,7 +260,6 @@ class ColorPicker {
                 this.hsb = hsb;
                 this.updateCanvas();
                 this.updateDisplay();
-                this.updateModalDisplay();
             });
             this.themeColorsGrid.appendChild(colorDiv);
         });
