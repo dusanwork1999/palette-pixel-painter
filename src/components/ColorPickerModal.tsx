@@ -7,11 +7,18 @@ import { ColorInputs } from './ColorInputs';
 import { ColorPickerActions } from './ColorPickerActions';
 import { useColorState } from '../hooks/useColorState';
 
-interface ColorPickerModalProps {
-  onClose: () => void;
+interface ColorResult {
+  hex: string;
+  opacity: number;
 }
 
-export const ColorPickerModal: React.FC<ColorPickerModalProps> = ({ onClose }) => {
+interface ColorPickerModalProps {
+  onClose: () => void;
+  onSelect: (colorResult: ColorResult) => void;
+  position: { x: number; y: number };
+}
+
+export const ColorPickerModal: React.FC<ColorPickerModalProps> = ({ onClose, onSelect, position }) => {
   const {
     hsb,
     setHsb,
@@ -50,9 +57,10 @@ export const ColorPickerModal: React.FC<ColorPickerModalProps> = ({ onClose }) =
   }, [setHex]);
 
   const handleSelect = useCallback(() => {
-    console.log('Selected color:', hex, 'Opacity:', opacity);
-    onClose();
-  }, [hex, opacity, onClose]);
+    const colorResult: ColorResult = { hex, opacity };
+    console.log('Selected color:', colorResult);
+    onSelect(colorResult);
+  }, [hex, opacity, onSelect]);
 
   // Calculate color with opacity for preview
   const colorWithOpacity = useMemo(() => {
@@ -67,8 +75,14 @@ export const ColorPickerModal: React.FC<ColorPickerModalProps> = ({ onClose }) =
   }, [hex, opacity]);
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm font-roboto">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-start justify-start p-4 z-50">
+      <div 
+        className="bg-white rounded-2xl shadow-2xl p-6 w-[230px] h-[400px] font-roboto overflow-auto"
+        style={{
+          marginLeft: `${position.x}px`,
+          marginTop: `${position.y}px`,
+        }}
+      >
         {/* Gradient Canvas */}
         <div className="mb-6">
           <GradientCanvas
