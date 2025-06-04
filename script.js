@@ -1,4 +1,3 @@
-
 class ColorPicker {
     constructor() {
         this.hsb = { h: 0, s: 79, b: 94 }; // Default to #F04343
@@ -55,7 +54,7 @@ class ColorPicker {
         this.positionX.addEventListener('change', () => this.updateModalPosition());
         this.positionY.addEventListener('change', () => this.updateModalPosition());
         
-        // Modal events - 바깥 클릭으로 닫히는 기능 제거
+        // Modal events
         this.cancelBtn.addEventListener('click', () => this.closeModal());
         this.selectBtn.addEventListener('click', () => this.selectColor());
         
@@ -76,7 +75,7 @@ class ColorPicker {
         });
         this.hexInput.addEventListener('blur', () => this.handleHexInput());
         
-        // Opacity spinner events - 실시간 동기화를 위해 input 이벤트 추가
+        // Opacity spinner events
         this.opacitySpinner.addEventListener('input', () => this.handleOpacitySpinner());
         this.opacitySpinner.addEventListener('change', () => this.handleOpacitySpinner());
         
@@ -231,7 +230,6 @@ class ColorPicker {
             this.opacity = value;
             this.updateModalDisplay();
         } else {
-            // Revert to current value if invalid
             this.opacitySpinner.value = Math.round(this.opacity);
         }
     }
@@ -240,14 +238,21 @@ class ColorPicker {
         if ('EyeDropper' in window) {
             const eyeDropper = new EyeDropper();
             eyeDropper.open().then((result) => {
+                // Hex 값을 HSB로 변환하여 설정
                 const hsb = ColorUtils.hexToHsb(result.sRGBHex);
                 this.hsb = hsb;
+                
+                console.log('Eyedropper selected color:', result.sRGBHex);
+                console.log('Converted to HSB:', hsb);
+                
+                // Canvas와 모든 UI 요소를 업데이트
                 this.updateCanvas();
                 this.updateModalDisplay();
             }).catch((error) => {
                 console.log('User cancelled the eyedropper');
             });
         } else {
+            alert('EyeDropper API is not supported in this browser');
             console.log('EyeDropper API not supported');
         }
     }
