@@ -71,7 +71,10 @@ class ColorPicker {
         
         // Input events
         this.hexInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') this.handleHexInput();
+            if (e.key === 'Enter') {
+                e.preventDefault(); // 폼 제출 방지
+                this.handleHexInput();
+            }
         });
         this.hexInput.addEventListener('blur', () => this.handleHexInput());
         
